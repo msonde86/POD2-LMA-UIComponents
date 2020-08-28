@@ -51,7 +51,7 @@ const LoanSearch = props => {
                         <th>#</th>
                         <th>Borrower Name</th>
                         <th>Loan Number</th>
-                        <th>Loan Ammount</th>
+                        <th>Loan Amount</th>
                     </tr>
                 </thead>
                 <tbody>
