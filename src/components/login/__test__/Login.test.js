@@ -13,7 +13,7 @@ test("renders without crashing",()=>{
 
 test("contains required text content only",()=>{
    const {getByTestId} = render(<Login/>)
-   expect(getByTestId('login')).toHaveTextContent("Loan Management AppEmail addressPasswordLogin")
+   expect(getByTestId('login')).toHaveTextContent("Loan Management AppEmail addressPassword ‌Login")
 })
 
 test("login button is disabled on load",()=>{
