@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Form, Button, Alert } from 'react-bootstrap'
+import { Card, Form, Button } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import './Login.css'
 
@@ -22,13 +22,14 @@ const Login = props => {
                             <Form.Control data-testid="email-input" name="email" placeholder="Enter email" size="lg"
                                 ref={register({ required: true, pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/ })} />
                         </Form.Group>
-                        <Form.Group controlId="formPassword">
+                        <Form.Group controlId="formPassword" className="password-formgroup">
                             <Form.Label>Password</Form.Label>
                             <Form.Control data-testid="password-input" name="password" type="password" placeholder="Enter password" size="lg"
                                 ref={register({ required: true, min: 1 })} />
+                        {!(errors.email || errors.password) &&<p className="login-message-blank">  &zwnj;</p>}
+                        {(errors.email || errors.password) && <p className="text-center login-message">Invalid email or password!</p>}
                         </Form.Group>
-                        {(errors.email || errors.password) && <Alert variant="danger">Invalid email/password!</Alert>}
-                        <Button data-testid="login-button" type="submit" className="w-100" disabled={(Object.keys(touched).length !== 2) ||
+                        <Button data-testid="login-button" type="submit" className="w-100 login-button" disabled={(Object.keys(touched).length !== 2) ||
                             (Object.keys(errors).length > 0)}>Login</Button>
 
                     </form>
