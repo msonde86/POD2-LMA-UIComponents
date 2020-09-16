@@ -15,7 +15,6 @@ function App() {
       <Header />
       <Container className="d-flex justify-content-center align-items-center">
         <Switch>
-        <Route path="/" exact component={Login} />
           <Route path="/login" exact component={Login} />
           <Route path="/loan-search" exact component={LoanSearch}/>
         </Switch>
