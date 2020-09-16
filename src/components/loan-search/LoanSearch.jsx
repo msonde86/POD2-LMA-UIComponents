@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import './LoanSearch.css'
 import { Row, Form, Col, Button, Table, Alert } from 'react-bootstrap'
+import axios from 'axios'
 
 import { useForm } from 'react-hook-form'
 
-
 const LoanSearch = props => {
 
-
+  const fillerURl='http://localhost:8082/loan/data/filter'
+    const [data,setData]=useState('')
     const { register, handleSubmit } = useForm()
     const [error, setError] = useState(false)
     const [inputLength, setInputLength] = useState(0);
@@ -29,7 +30,6 @@ const LoanSearch = props => {
                 if (loan < 0)
                     err = true
 
-
             }
             if (ammount.toString().trim().length > 0) {
                 if (ammount < 0)
@@ -40,17 +40,40 @@ const LoanSearch = props => {
         setInputLength(length)
     }
 
-
-
     const onSubmit = data => {
         console.log(data)
+         let param={};
+
+       if( data.borrower.length>0){
+           param['borrower']=data.borrower
+       }if( data.loan>0 ){
+        param['number']=data.loan
+       }if(data.amount>0){
+        param['amount']=data.ammount
+       }
+           
         if (!data.borrower.trim() && !data.loan <= 0 && !data.amount <= 0) {
             setError(true)
+        
             return
         } else {
+                              
+                axios.get(fillerURl,{params:param})
+                .then( (response)=> {
+                                  console.log(response.data);
+                                  setData(response.data)
+                                  setError(false)
+        
+                                 
+  
+                }, [setData])
+                .catch((error)=> {
+                  console.log(error);
+                });   
+            
+                console.log(data)
             console.log(!data.borrower.trim(), !data.loan <= 0, !data.ammount <= 0)
         }
-
 
     }
 
@@ -102,12 +125,20 @@ const LoanSearch = props => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Mark</td>
-                        <td>6545</td>
-                        <td>54654</td>
-                    </tr>
+                {
+                    
+                         ()=>props.data.mpa(   (obj)=> 
+                                 
+                                <tr key = {obj.loanNumber}>
+                                      <td> {obj.loanNumber}</td> 
+                                     <td> {obj.borrowerName}</td>   
+
+                                     <td> {obj.loanAmount}</td>   
+                                    
+                                </tr>
+                            )
+
+                        } 
                 </tbody>
             </Table>
         </Col>
@@ -116,3 +147,4 @@ const LoanSearch = props => {
 }
 
 export default LoanSearch
+
