@@ -8,10 +8,12 @@ import { useForm } from 'react-hook-form'
 const LoanSearch = props => {
 
   const fillerURl='http://localhost:8082/loan/data/filter'
-    const [data,setData]=useState('')
+    const [data,setData]=useState([])
     const { register, handleSubmit } = useForm()
     const [error, setError] = useState(false)
     const [inputLength, setInputLength] = useState(0);
+    const [notFound, setNotFound] = useState(false)
+    const [narrowDown, setNarrowDown] = useState(false)
 
     const validate = () => {
         let length = 0
@@ -62,16 +64,24 @@ const LoanSearch = props => {
                 .then( (response)=> {
                                   console.log(response.data);
                                   setData(response.data)
+                                  setNarrowDown(false)
                                   setError(false)
+                                  if(data.length>0)
+                                  {
+                                      setNarrowDown(true)
+                                  }
+                                 setNotFound(false)
         
                                  
   
                 }, [setData])
                 .catch((error)=> {
                   console.log(error);
+                  setData([])
+                  setNarrowDown(false)
+                  setNotFound(true)
                 });   
             
-                console.log(data)
             console.log(!data.borrower.trim(), !data.loan <= 0, !data.ammount <= 0)
         }
 
@@ -111,34 +121,36 @@ const LoanSearch = props => {
         </Col>
 
         <Col xs={12} className="search-results">
-            <Alert variant="warning" className="text-center"> No Results Found!</Alert>
+            <Alert variant="warning" show={notFound} className="text-center"> No Results Found!</Alert>
         </Col>
-
+        <Col xs={12} className="search-results">
+            <Alert variant="warning" show={narrowDown} className="text-center"> Please Narrow Down Your Search </Alert>
+        </Col>
+        
         <Col xs={12} className="search-results">
             <Table striped bordered hover>
                 <thead>
                     <tr>
-                        <th>#</th>
+                    <th>Loan Number</th>
                         <th>Borrower Name</th>
-                        <th>Loan Number</th>
                         <th>Loan Amount</th>
                     </tr>
                 </thead>
                 <tbody>
                 {
                     
-                         ()=>props.data.mpa(   (obj)=> 
-                                 
-                                <tr key = {obj.loanNumber}>
-                                      <td> {obj.loanNumber}</td> 
-                                     <td> {obj.borrowerName}</td>   
+                    data.map(  obj => 
+                             
+                               { return (<tr key = {obj.loanNumber}>
+                                  <td> {obj.loanNumber}</td> 
+                                 <td> {obj.borrowerName}</td>   
 
-                                     <td> {obj.loanAmount}</td>   
-                                    
-                                </tr>
-                            )
+                                 <td> {obj.loanAmount}</td>   
+                                
+                            </tr>)}
+                        )
 
-                        } 
+                    } 
                 </tbody>
             </Table>
         </Col>
