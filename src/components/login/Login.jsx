@@ -2,17 +2,33 @@ import React from 'react'
 import { Card, Form, Button } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import './Login.css'
+import { connect } from "react-redux"
+import { loginSuccess } from '../../redux/actions'
+
+const mapStateToProps = state => {
+    return { token: state.token };
+}
+
+const mapDispatchToProps = dispatch => {
+    return { loginSuccess: token => dispatch(loginSuccess(token)) };
+}
 
 const Login = props => {
 
     const { register, handleSubmit, errors, formState } = useForm()
 
     const { touched } = formState;
-    const onSubmit = data => console.log(data)
+
+    const onSubmit = data => {
+        console.log(data)
+        
+        //replace "token" with token from backend after successfull token ...  or else show error message
+        props.loginSuccess("token")
+    }
 
 
     return (
-        <div data-testid = "login" className="login-component align-items-center d-flex">
+        <div data-testid="login" className="login-component align-items-center d-flex">
             <Card id="login-card">
                 <Card.Body>
                     <Card.Title className="display-4">Loan Management App</Card.Title>
@@ -26,8 +42,8 @@ const Login = props => {
                             <Form.Label>Password</Form.Label>
                             <Form.Control data-testid="password-input" name="password" type="password" placeholder="Enter password" size="lg"
                                 ref={register({ required: true, min: 1 })} />
-                        {!(errors.email || errors.password) &&<p className="login-message-blank">  &zwnj;</p>}
-                        {(errors.email || errors.password) && <p className="text-center login-message">Invalid email or password!</p>}
+                            {!(errors.email || errors.password) && <p className="login-message-blank">  &zwnj;</p>}
+                            {(errors.email || errors.password) && <p className="text-center login-message">Invalid email or password!</p>}
                         </Form.Group>
                         <Button data-testid="login-button" type="submit" className="w-100 login-button" disabled={(Object.keys(touched).length !== 2) ||
                             (Object.keys(errors).length > 0)}>Login</Button>
@@ -39,4 +55,4 @@ const Login = props => {
     )
 }
 
-export default Login
+export default connect(mapStateToProps, mapDispatchToProps)(Login)
