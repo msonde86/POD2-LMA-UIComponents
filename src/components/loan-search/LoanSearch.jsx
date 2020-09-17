@@ -4,10 +4,11 @@ import { Row, Form, Col, Button, Table, Alert } from 'react-bootstrap'
 import axios from 'axios'
 
 import { useForm } from 'react-hook-form'
+import { FILLER_URL } from '../../app-strings/backend-urls'
 
 const LoanSearch = props => {
 
-  const fillerURl='http://localhost:8082/loan/data/filter'
+  
     const [data,setData]=useState([])
     const { register, handleSubmit } = useForm()
     const [error, setError] = useState(false)
@@ -60,7 +61,7 @@ const LoanSearch = props => {
             return
         } else {
                               
-                axios.get(fillerURl,{params:param})
+                axios.get(FILLER_URL,{params:param})
                 .then( (response)=> {
                                   console.log(response.data);
                                   setData(response.data)
