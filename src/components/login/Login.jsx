@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Card, Form, Button } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import './Login.css'
 import { connect } from "react-redux"
 import { loginSuccess } from '../../redux/actions'
+import { useHistory } from 'react-router-dom'
 
 const mapStateToProps = state => {
     return { token: state.token };
@@ -14,7 +15,7 @@ const mapDispatchToProps = dispatch => {
 }
 
 const Login = props => {
-
+    const history = useHistory();
     const { register, handleSubmit, errors, formState } = useForm()
 
     const { touched } = formState;
@@ -25,6 +26,14 @@ const Login = props => {
         //replace "token" with token from backend after successfull token ...  or else show error message
         props.loginSuccess("token")
     }
+
+    useEffect(()=>{
+        if(props.token.length>0){
+            history.push("/loan-search")
+        }
+    },[props.token,history])
+
+    
 
 
     return (
