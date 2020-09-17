@@ -23,10 +23,10 @@ const Login = props => {
     const headers = { 
         'Authorization' : 'Bearer scbpod2'
     }
-    
+
     const onSubmit = data => {
-        
-   
+       
+
     axios.post('http://localhost:8081/api/login/authenticate', data, headers )
         .then( (response)=> {
                           console.log(response.data.token);
@@ -36,10 +36,10 @@ const Login = props => {
          // console.log(error);
          console.log('in valid')
         });
-       
-        
-        //replace "token" with token from backend after successfull token ...  or else show error message
-       // props.loginSuccess("token")
+
+
+
+         // props.loginSuccess("token")
     }
 
 
