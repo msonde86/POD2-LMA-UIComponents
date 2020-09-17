@@ -66,7 +66,7 @@ const LoanSearch = props => {
                                   setData(response.data)
                                   setNarrowDown(false)
                                   setError(false)
-                                  if(data.length>0)
+                                  if(response.data.length>1)
                                   {
                                       setNarrowDown(true)
                                   }

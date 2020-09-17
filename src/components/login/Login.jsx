@@ -5,6 +5,7 @@ import './Login.css'
 import { connect } from "react-redux"
 import { loginSuccess } from '../../redux/actions'
 import { useHistory } from 'react-router-dom'
+import axios from 'axios'
 
 const mapStateToProps = state => {
     return { token: state.token };
@@ -19,13 +20,28 @@ const Login = props => {
     const { register, handleSubmit, errors, formState } = useForm()
 
     const { touched } = formState;
-
+    const headers = { 
+        'Authorization' : 'Bearer scbpod2'
+    }
+    
     const onSubmit = data => {
-        console.log(data)
+        
+   
+    axios.post('http://localhost:8081/api/login/authenticate', data, headers )
+        .then( (response)=> {
+                          console.log(response.data.token);
+                          props.loginSuccess(response.data.token)
+        })
+        .catch((error)=> {
+         // console.log(error);
+         console.log('in valid')
+        });
+       
         
         //replace "token" with token from backend after successfull token ...  or else show error message
-        props.loginSuccess("token")
+       // props.loginSuccess("token")
     }
+
 
     useEffect(()=>{
         if(props.token.length>0){
@@ -44,15 +60,15 @@ const Login = props => {
                     <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
                         <Form.Group controlId="formEmail">
                             <Form.Label>Email address</Form.Label>
-                            <Form.Control data-testid="email-input" name="email" placeholder="Enter email" size="lg"
+                            <Form.Control data-testid="email-input" name="emailId" placeholder="Enter email" size="lg"
                                 ref={register({ required: true, pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/ })} />
                         </Form.Group>
                         <Form.Group controlId="formPassword" className="password-formgroup">
                             <Form.Label>Password</Form.Label>
                             <Form.Control data-testid="password-input" name="password" type="password" placeholder="Enter password" size="lg"
                                 ref={register({ required: true, min: 1 })} />
-                            {!(errors.email || errors.password) && <p className="login-message-blank">  &zwnj;</p>}
-                            {(errors.email || errors.password) && <p className="text-center login-message">Invalid email or password!</p>}
+                            {!(errors.emailId || errors.password) && <p className="login-message-blank">  &zwnj;</p>}
+                            {(errors.emailId || errors.password) && <p className="text-center login-message">Invalid email or password!</p>}
                         </Form.Group>
                         <Button data-testid="login-button" type="submit" className="w-100 login-button" disabled={(Object.keys(touched).length !== 2) ||
                             (Object.keys(errors).length > 0)}>Login</Button>
