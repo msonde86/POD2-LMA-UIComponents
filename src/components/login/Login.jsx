@@ -6,6 +6,7 @@ import { connect } from "react-redux"
 import { loginSuccess } from '../../redux/actions'
 import { useHistory } from 'react-router-dom'
 import axios from 'axios'
+import { LOGIN_URL } from '../../app-strings/backend-urls'
 
 const mapStateToProps = state => {
     return { token: state.token };
@@ -17,39 +18,39 @@ const mapDispatchToProps = dispatch => {
 
 const Login = props => {
     const history = useHistory();
-    const { register, handleSubmit, errors, formState } = useForm()
+    const { register, handleSubmit, errors, formState, setError } = useForm()
 
     const { touched } = formState;
-    const headers = { 
-        'Authorization' : 'Bearer scbpod2'
+    const headers = {
+        'Authorization': 'Bearer scbpod2'
     }
 
     const onSubmit = data => {
-       
 
-    axios.post('http://localhost:8081/api/login/authenticate', data, headers )
-        .then( (response)=> {
-                          console.log(response.data.token);
-                          props.loginSuccess(response.data.token)
-        })
-        .catch((error)=> {
-         // console.log(error);
-         console.log('in valid')
-        });
-
-
-
-         // props.loginSuccess("token")
+        axios.post(LOGIN_URL, data, headers)
+            .then((response) => {
+                console.log(response.data.token);
+                props.loginSuccess(response.data.token)
+            })
+            .catch((error) => {
+                console.log('Invalid email or password!')
+                setError("emailId", {
+                    type: "manual",
+                    message: "Invalid email!"
+                });
+                setError("password", {
+                    type: "manual",
+                    message: "Invalid password!"
+                });
+            });
     }
 
 
-    useEffect(()=>{
-        if(props.token.length>0){
+    useEffect(() => {
+        if (props.token.length > 0) {
             history.push("/loan-search")
         }
-    },[props.token,history])
-
-    
+    }, [props.token, history])
 
 
     return (
@@ -72,7 +73,6 @@ const Login = props => {
                         </Form.Group>
                         <Button data-testid="login-button" type="submit" className="w-100 login-button" disabled={(Object.keys(touched).length !== 2) ||
                             (Object.keys(errors).length > 0)}>Login</Button>
-
                     </form>
                 </Card.Body>
             </Card>
