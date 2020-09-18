@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDom from 'react-dom'
-import LoanSearch from '../LoanSearch'
+import {LoanSearch} from '../LoanSearch'
 import 'mutationobserver-shim';
 import { render, fireEvent, cleanup } from '@testing-library/react'
 import "@testing-library/jest-dom/extend-expect"

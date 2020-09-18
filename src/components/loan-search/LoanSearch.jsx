@@ -6,7 +6,7 @@ import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { FILLER_URL } from '../../app-strings/backend-urls'
 
-const LoanSearch = props => {
+export const LoanSearch = props => {
 
   
     const [data,setData]=useState([])

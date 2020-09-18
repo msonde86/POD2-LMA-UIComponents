@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDom from 'react-dom'
-import Login from '../Login'
+import {Login} from '../Login'
 import 'mutationobserver-shim';
 import {render} from '@testing-library/react'
 import "@testing-library/jest-dom/extend-expect"

@@ -16,7 +16,7 @@ const mapDispatchToProps = dispatch => {
     return { loginSuccess: token => dispatch(loginSuccess(token)) };
 }
 
-const Login = props => {
+export const Login = props => {
     const history = useHistory();
     const { register, handleSubmit, errors, formState, setError } = useForm()
 
@@ -47,6 +47,7 @@ const Login = props => {
 
 
     useEffect(() => {
+        if(props.token)
         if (props.token.length > 0) {
             history.push("/loan-search")
         }
