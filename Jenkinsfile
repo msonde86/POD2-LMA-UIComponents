@@ -14,16 +14,17 @@ pipeline {
                 sh 'npm install'
             }
         }
-        stage('Test') {
-            steps {
-                sh 'npm test'
-            }
-        }
         stage('Deliver') { 
             steps {
-                sh './jenkins/scripts/deliver.sh' 
+                sh 'set -x' 
+                sh 'npm start &'
+                sh 'sleep 1'
+                sh 'echo $! > .pidfile'
+                sh 'set +x'
                 input message: 'Finished using the web site? (Click "Proceed" to continue)' 
                 sh './jenkins/scripts/kill.sh' 
+                sh 'set -x'
+                sh 'kill $(cat .pidfile)'
             }
         }
     }
